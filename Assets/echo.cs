@@ -65,7 +65,7 @@ public class echo : MonoBehaviour
             {
                 Socket requestSocket = (Socket)result.AsyncState;
                 int count = socket.EndSend(result);
-                Debug.Log("Socket send success,count=" +count);
+                Debug.Log("Socket send success,count=" + count);
             }
             catch (SocketException ex)
             {
