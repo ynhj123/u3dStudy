@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +9,9 @@ public class echo : MonoBehaviour
     //定义套接字
     Socket socket;
     //数据缓存
+    
     byte[] readBuff = new byte[1024];
+    int buffCount = 0;
     string recvStr = "";
     //ui
     public InputField inputField;
@@ -44,19 +47,50 @@ public class echo : MonoBehaviour
         {
             Socket socket = (Socket)result.AsyncState;
             int count = socket.EndReceive(result);
-            recvStr = System.Text.Encoding.Default.GetString(readBuff, 0, count);
-            socket.BeginReceive(readBuff, 0, 1024, 0, ReceiveCallBack, socket);
+            buffCount += count;
+            socket.BeginReceive(readBuff, buffCount, 1024-buffCount, 0, ReceiveCallBack, socket);
+            //recvStr = System.Text.Encoding.Default.GetString(readBuff, 0, count);
+            //socket.BeginReceive(readBuff, 0, 1024, 0, ReceiveCallBack, socket);
         }
         catch (SocketException ex)
         {
             Debug.Log("Socket receive faild,reason" + ex.ToString());
         }
     }
+    public void OnReceiveData()
+    {
+        Debug.Log("[Receive1] buffcount=" + buffCount);
+        Debug.Log("[Receive2] readBuff=" + BitConverter.ToString(readBuff));
+        if(buffCount <= 2)
+        {
+            return;
+        }
+        Int16 bodyLength = BitConverter.ToInt16(readBuff, 0);
+        Debug.Log("[Receive3] bodyLength=" + bodyLength);
+        if(buffCount < 2 + bodyLength)
+        {
+            return;
+        }
+        string s = System.Text.Encoding.UTF8.GetString(readBuff, 2, buffCount);
+        Debug.Log("[Receive4] string=" + s);
+        int start = 2 + bodyLength;
+        int count = buffCount - start;
+        Array.Copy(readBuff, start, readBuff, 0, count);
+        buffCount -= start;
+        Debug.Log("[Receive5] buffcount=" + buffCount);
+        recvStr = s + "\n" + recvStr;
+        OnReceiveData();
+
+    }
 
     public void Send()
     {
         string sendStr = inputField.text;
-        byte[] sendBytes = System.Text.Encoding.Default.GetBytes(sendStr);
+        byte[] bodyBytes = System.Text.Encoding.Default.GetBytes(sendStr);
+        int length = (Int16)bodyBytes.Length;
+        byte[] lengthBytes = BitConverter.GetBytes(length);
+        byte[] sendBytes = lengthBytes.Concat(bodyBytes).ToArray();
+       /* byte[] sendBytes = System.Text.Encoding.Default.GetBytes(sendStr);*/
         /*socket.Send(sendBytes);*/
 
         socket.BeginSend(sendBytes, 0, sendBytes.Length, 0, (result) =>
