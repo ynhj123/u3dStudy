@@ -48,6 +48,7 @@ public static class NetManager
             int count = socket.EndReceive(result);
             string recvStr = System.Text.Encoding.Default.GetString(readBuff, 0, count);
             //msgList.Add(recvStr);
+            UnityEngine.Debug.Log("client Receive:" + recvStr);
             msgQueue.Enqueue(recvStr);
             socket.BeginReceive(readBuff, 0, 1024, 0, ReceiveCallBack, socket);
         }
@@ -89,6 +90,7 @@ public static class NetManager
         /*string msgStr = msgList[0];
         msgList.RemoveAt(0);*/
         string msgStr = msgQueue.Dequeue();
+        UnityEngine.Debug.Log("queueContent:" + msgStr);
         string[] split = msgStr.Split('|');
         string msgName = split[0];
         string msgArgs = split[1];

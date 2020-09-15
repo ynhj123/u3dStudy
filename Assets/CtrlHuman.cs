@@ -9,7 +9,7 @@ public class CtrlHuman : BaseHuman
     }
 
     // Update is called once per frame
-    void Update()
+    new void Update()
     {
         base.Update();
         if (Input.GetMouseButtonDown(0))
@@ -20,7 +20,12 @@ public class CtrlHuman : BaseHuman
             if (hit.collider.tag == "Terrain")
             {
                 MoveTo(hit.point);
-                NetManager.Send("Enter|127.0.0.1,100,200,300,45");
+                string sendStr = "Move|";
+                sendStr += NetManager.GetDesc();
+                sendStr += hit.point.x + ",";
+                sendStr += hit.point.y + ",";
+                sendStr += hit.point.z + ",";
+                NetManager.Send(sendStr);
             }
         }
     }
