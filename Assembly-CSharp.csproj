@@ -64,14 +64,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\BaseHuman.cs" />
+    <Compile Include="Assets\BattleMsg.cs" />
     <Compile Include="Assets\CtrlHuman.cs" />
     <Compile Include="Assets\Main.cs" />
+    <Compile Include="Assets\NetFramework\ByteArray.cs" />
+    <Compile Include="Assets\NetFramework\MsgBase.cs" />
+    <Compile Include="Assets\NetFramework\NetManager_fin.cs" />
     <Compile Include="Assets\NetManager.cs" />
     <Compile Include="Assets\SampleScenes\Menu\Scripts\MenuSceneLoader.cs" />
     <Compile Include="Assets\SampleScenes\Menu\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\SampleScenes\Menu\Scripts\SceneAndURLLoader.cs" />
     <Compile Include="Assets\SyncHuman.cs" />
+    <Compile Include="Assets\SysMsg.cs" />
     <Compile Include="Assets\echo.cs" />
+    <Compile Include="Assets\proto\BattleMsg.cs" />
+    <Compile Include="Assets\proto\SysMsg.cs" />
     <None Include="Assets\SampleScenes\Shaders\Skybox-Procedural.shader" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.9f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
@@ -255,6 +262,9 @@
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.9f1/Editor/Data/Managed/UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>D:/git/u3dStudy/Assets/proto/protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.9f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>

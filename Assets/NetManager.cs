@@ -14,6 +14,7 @@ public static class NetManager
     private static Dictionary<string, MsgListener> listeners = new Dictionary<string, MsgListener>();
     static List<string> msgList = new List<string>();
     static Queue<string> msgQueue =  new Queue<string>();
+    
     public static void AddListener(string msgName, MsgListener listener)
     {
         UnityEngine.Debug.Log("AddListener:" + msgName);
@@ -33,10 +34,12 @@ public static class NetManager
         return socket.LocalEndPoint.ToString();
     }
     public static void Connect(string ip, int port)
-    {
+    {   
+        
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        
         //同步方法简化
-        socket.Connect(ip, port);
+        /*socket.Connect(ip, port);*/
         socket.BeginReceive(readBuff, 0, 1024, 0, ReceiveCallBack, socket);
     }
 
@@ -99,6 +102,7 @@ public static class NetManager
             listeners[msgName](msgArgs);
         }
     }
+
 
    
 }
